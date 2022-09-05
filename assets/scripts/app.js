@@ -1,11 +1,30 @@
-const addMovieModal = document.getElementById('add-modal')
+const addMovieModal = document.getElementById("add-modal")
 
-const startAddMovieButton = document.querySelector('header button')
+const startAddMovieButton = document.querySelector("header button")
 // const startAddMovieButton = document.querySelector('header').lastElementChild
+const backdrop = document.getElementById('backdrop')
+//alt const backdrop = document.body.firstElementChild
+const cancelAddMovieButton = addMovieModal.querySelector('.btn--passive')
 
-
-const toggleVisibleMovieModal = ()  => {
-    addMovieModal.classList.toggle('visible')
+//button to switch the background class to gray
+const toggleBackDrop = () => {
+    backdrop.classList.toggle('visible')
 }
 
-startAddMovieButton.addEventListener('click', toggleVisibleMovieModal)
+//button with function to make modal visible
+const toggleVisibleMovieModal = () => {
+  addMovieModal.classList.toggle("visible")
+  toggleBackDrop()
+}
+
+const backdropClickHandler = () => {
+    toggleVisibleMovieModal()
+ }
+
+ const cancelAddMovie = () => {
+    toggleVisibleMovieModal()
+ }
+
+startAddMovieButton.addEventListener("click", toggleVisibleMovieModal)
+backdrop.addEventListener('click',backdropClickHandler)
+cancelAddMovieButton.addEventListener('click', cancelAddMovie)
