@@ -20,11 +20,11 @@ const updateUI = () => {
 }
 
 const renderNewMovieElement = (title, imageUrl, rating) => {
-  const newMovieElement = document.createElement('li')
+  let newMovieElement = document.createElement('li')
   newMovieElement.className = 'movie-element'
   newMovieElement.innerHTML = `
-  <div class='movie-element__image>
-  <img src="${imageUrl}" alt="${title}>
+  <div class='movie-element__image'>
+  <img src="${imageUrl}" alt="${title}">
 
   </div>
   <div class="movie-element__info">
@@ -32,6 +32,7 @@ const renderNewMovieElement = (title, imageUrl, rating) => {
   <p>${rating}/5 Stars </p>
   </div>
   `
+  console.log(newMovieElement.innerHTML);
   const listRoot = document.getElementById('movie-list')
   listRoot.append(newMovieElement)
 }
