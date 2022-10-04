@@ -8,9 +8,14 @@ const cancelAddMovieButton =
 const confirmAddMovieButton = cancelAddMovieButton.nextElementSibling
 const userInputs = addMovieModal.querySelectorAll("input")
 const entryTextSection = document.getElementById("entry-text")
-const deleteMovieModal = document.getElementById('delete-modal')
+const deleteMovieModal = document.getElementById("delete-modal")
 
 const movies = []
+
+//button to switch the background class to gray
+const toggleBackDrop = () => {
+  backdrop.classList.toggle("visible")
+}
 
 const updateUI = () => {
   if (movies.length === 0) {
@@ -20,7 +25,12 @@ const updateUI = () => {
   }
 }
 
-const deleteMovie = (movieId) => {
+const closeMovieDeletionModal = () => {
+  toggleBackDrop()
+  deleteMovieModal.classList.remove("visible")
+}
+
+const deleteMovieHandler = (movieId) => {
   let movieIndex = 0
   for (const movie of movies) {
     if (movie.id === movieId) {
@@ -32,17 +42,41 @@ const deleteMovie = (movieId) => {
   const listRoot = document.getElementById("movie-list")
   listRoot.children[movieIndex].remove()
   // listRoot.removeChild(listRoot.children[movieIndex])
+
+  closeMovieDeletionModal()
 }
 
-const closeMovieDeletionModal = () => {
+const startDeleteMovieHandler = (movieId) => {
+  deleteMovieModal.classList.add("visible")
   toggleBackDrop()
-  deleteMovieModal.classList.remove('visible')
-}
 
-const deleteMovieHandler = (movieId) => {
-  deleteMovieModal.classList.add('visible')
-  toggleBackDrop()
-  // deleteMovie(movieId)
+  const cancelDeletionButton =
+    deleteMovieModal.querySelector(".btn--passive")
+  let confirmDeletionButton =
+    deleteMovieModal.querySelector(".btn--danger")
+
+      //hacky-- need to get rid of the event listeners since you keep createing them each button click on Delete
+      //this makes a deep clone
+      //try display to modal hidden add hidden display none.
+  confirmDeletionButton.replaceWith(confirmDeletionButton.cloneNode(true))
+  confirmDeletionButton = deleteMovieModal.querySelector(".btn--danger")
+
+  // confirmDeletionButton.removeEventListener('click', deleteMovieHandler.bind(null, movieId))
+  cancelDeletionButton.removeEventListener(
+    "click",
+    closeMovieDeletionModal
+  )
+
+  
+  cancelDeletionButton.addEventListener(
+    "click",
+    closeMovieDeletionModal
+  )
+  confirmDeletionButton.addEventListener(
+    "click",
+    deleteMovieHandler.bind(null, movieId)
+  )
+  
 }
 
 const renderNewMovieElement = (id, title, imageUrl, rating) => {
@@ -59,20 +93,17 @@ const renderNewMovieElement = (id, title, imageUrl, rating) => {
   </div>
   `
 
-  newMovieElement.addEventListener( "click", deleteMovieHandler.bind(null, id))
+  newMovieElement.addEventListener(
+    "click",
+    startDeleteMovieHandler.bind(null, id)
+  )
   // console.log(newMovieElement.innerHTML)
   const listRoot = document.getElementById("movie-list")
   listRoot.append(newMovieElement)
-
-}
-
-//button to switch the background class to gray
-const toggleBackDrop = () => {
-  backdrop.classList.toggle("visible")
 }
 
 const closeMovieModal = () => {
-addMovieModal.classList.remove('visible')
+  addMovieModal.classList.remove("visible")
 }
 
 //button with function to make modal visible
@@ -85,9 +116,9 @@ const clearMovieInputs = () => {
   userInputs.forEach((usrInput) => (usrInput.value = ""))
 }
 
-
 const cancelAddMovieHandler = () => {
   closeMovieModal()
+  toggleBackDrop()
   clearMovieInputs()
 }
 
@@ -130,6 +161,7 @@ const addMovieHandlder = () => {
 const backdropClickHandler = () => {
   closeMovieModal()
   closeMovieDeletionModal()
+  clearMovieInputs()
 }
 
 startAddMovieButton.addEventListener("click", showMovieModal)
