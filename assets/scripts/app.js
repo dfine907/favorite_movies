@@ -44,6 +44,7 @@ const deleteMovieHandler = (movieId) => {
   // listRoot.removeChild(listRoot.children[movieIndex])
 
   closeMovieDeletionModal()
+  updateUI()
 }
 
 const startDeleteMovieHandler = (movieId) => {
@@ -55,11 +56,14 @@ const startDeleteMovieHandler = (movieId) => {
   let confirmDeletionButton =
     deleteMovieModal.querySelector(".btn--danger")
 
-      //hacky-- need to get rid of the event listeners since you keep createing them each button click on Delete
-      //this makes a deep clone
-      //try display to modal hidden add hidden display none.
-  confirmDeletionButton.replaceWith(confirmDeletionButton.cloneNode(true))
-  confirmDeletionButton = deleteMovieModal.querySelector(".btn--danger")
+  //hacky-- need to get rid of the event listeners since you keep createing them each button click on Delete
+  //this makes a deep clone
+  //try display to modal hidden add hidden display none.
+  confirmDeletionButton.replaceWith(
+    confirmDeletionButton.cloneNode(true)
+  )
+  confirmDeletionButton =
+    deleteMovieModal.querySelector(".btn--danger")
 
   // confirmDeletionButton.removeEventListener('click', deleteMovieHandler.bind(null, movieId))
   cancelDeletionButton.removeEventListener(
@@ -67,7 +71,6 @@ const startDeleteMovieHandler = (movieId) => {
     closeMovieDeletionModal
   )
 
-  
   cancelDeletionButton.addEventListener(
     "click",
     closeMovieDeletionModal
@@ -76,7 +79,6 @@ const startDeleteMovieHandler = (movieId) => {
     "click",
     deleteMovieHandler.bind(null, movieId)
   )
-  
 }
 
 const renderNewMovieElement = (id, title, imageUrl, rating) => {
